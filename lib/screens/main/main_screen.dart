@@ -1,3 +1,4 @@
+import 'package:datingappflutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
@@ -17,17 +18,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     const ComingSoonPage(title: 'Discover', icon: Icons.explore_outlined),
     const ComingSoonPage(title: 'Matches', icon: Icons.favorite_outline),
     const ComingSoonPage(title: 'Messages', icon: Icons.chat_bubble_outline),
-    ComingSoonPage(
-      title: 'Profile',
-      icon: Icons.person_outline,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.logout),
-          tooltip: 'Sign out',
-          onPressed: () => ref.read(authServiceProvider).signOut(),
-        ),
-      ],
-    ),
+    const ProfileScreen(),
   ];
 
   @override
