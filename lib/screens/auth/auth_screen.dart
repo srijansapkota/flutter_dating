@@ -75,7 +75,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       autofillHints: const [AutofillHints.email],
                       decoration: const InputDecoration(
                         labelText: 'Email',
-                        hintText: 'Enter your email',
+                        hintText: 'roshan.np208@example.com',
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
