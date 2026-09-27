@@ -84,6 +84,7 @@ class AuthFormNotifier extends Notifier<AuthFormState> {
 
       return null;
     }
+    return null;
   }
 }
 
