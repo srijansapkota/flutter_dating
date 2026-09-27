@@ -61,10 +61,14 @@ class ProfileScreen extends ConsumerWidget {
                       Center(
                         child: CircleAvatar(
                           radius: 60,
-                          backgroundImage: userProfile.avatarUrl != null
+                          backgroundImage:
+                              userProfile.avatarUrl != null &&
+                                  userProfile.avatarUrl!.isNotEmpty
                               ? NetworkImage(userProfile.avatarUrl!)
                               : null,
-                          child: userProfile.avatarUrl == null
+                          child:
+                              userProfile.avatarUrl == null ||
+                                  userProfile.avatarUrl!.isEmpty
                               ? const Icon(Icons.person, size: 60)
                               : null,
                         ),
