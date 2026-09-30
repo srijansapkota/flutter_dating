@@ -211,10 +211,10 @@ class _MatchCard extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                if (user.bio != null && user.bio!.isNotEmpty) ...[
+                if (user.bio.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(
-                    user.bio!,
+                    user.bio,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
