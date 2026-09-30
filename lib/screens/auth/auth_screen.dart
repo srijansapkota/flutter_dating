@@ -14,6 +14,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  String? _gender;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -24,9 +26,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await ref.read(authFormProvider.notifier).submit(
+    await ref
+        .read(authFormProvider.notifier)
+        .submit(
           email: _emailController.text.trim(),
           password: _passwordController.text,
+          gender: _gender,
         );
   }
 
@@ -50,17 +55,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     Text(
                       'DateYaFate',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      formState.isSignUp ? 'Create Your Account' : 'Sign in to your account',
+                      formState.isSignUp
+                          ? 'Create Your Account'
+                          : 'Sign in to your account',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
@@ -69,11 +75,17 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       autofillHints: const [AutofillHints.email],
                       decoration: const InputDecoration(
                         labelText: 'Email',
-                        hintText: 'Enter your email',
+                        hintText: 'roshan.np208@example.com',
                       ),
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) return 'Email is required';
-                        if (!value.contains('@')) return 'Enter a valid email';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Email is required';
+                        }
+
+                        if (!value.contains('@')) {
+                          return 'Enter a valid email';
+                        }
+
                         return null;
                       },
                     ),
@@ -87,16 +99,49 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         hintText: 'Enter your password',
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Password is required';
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+
                         return null;
                       },
-                      onFieldSubmitted: (_) => _handleSubmit(),
                     ),
+                    if (formState.isSignUp) ...[
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        value: _gender,
+                        decoration: const InputDecoration(labelText: 'Gender'),
+                        items: const [
+                          DropdownMenuItem(value: 'male', child: Text('Male')),
+                          DropdownMenuItem(
+                            value: 'female',
+                            child: Text('Female'),
+                          ),
+                        ],
+                        onChanged: formState.loading
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  _gender = value;
+                                });
+                              },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select your gender';
+                          }
+
+                          return null;
+                        },
+                      ),
+                    ],
                     if (formState.error != null) ...[
                       const SizedBox(height: 16),
                       Text(
                         formState.error!,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 13),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                     const SizedBox(height: 24),
@@ -106,7 +151,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           ? const SizedBox(
                               height: 18,
                               width: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
                           : Text(formState.isSignUp ? 'Sign Up' : 'Sign In'),
                     ),
@@ -114,9 +162,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     TextButton(
                       onPressed: formState.loading
                           ? null
-                          : () => ref.read(authFormProvider.notifier).setIsSignUp(!formState.isSignUp),
+                          : () {
+                              ref
+                                  .read(authFormProvider.notifier)
+                                  .setIsSignUp(!formState.isSignUp);
+
+                              setState(() {
+                                _gender = null;
+                              });
+                            },
                       child: Text(
-                        formState.isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up",
+                        formState.isSignUp
+                            ? 'Already have an account? Sign in'
+                            : "Don't have an account? Sign up",
                       ),
                     ),
                   ],

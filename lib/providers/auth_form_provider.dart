@@ -26,39 +26,68 @@ class AuthFormNotifier extends Notifier<AuthFormState> {
   @override
   AuthFormState build() => const AuthFormState();
 
-  void setIsSignUp(bool value) => state = state.copyWith(isSignUp: value, error: null);
+  void setIsSignUp(bool value) {
+    state = state.copyWith(isSignUp: value, error: null);
+  }
 
   Future<AuthDestination?> submit({
     required String email,
     required String password,
+    required String? gender,
   }) async {
     state = state.copyWith(loading: true, error: null);
+
     final authService = ref.read(authServiceProvider);
 
     try {
       if (state.isSignUp) {
-        final hasSession = await authService.signUp(email: email, password: password);
-        if (!hasSession) {
-          state = state.copyWith(loading: false, error: 'Please check your email for a confirmation link');
+        if (gender == null) {
+          state = state.copyWith(
+            loading: false,
+            error: 'Please select your gender',
+          );
           return null;
         }
-        state = state.copyWith(loading: false);
-        return AuthDestination.editProfile;
+
+        final hasSession = await authService.signUp(
+          email: email,
+          password: password,
+          gender: gender,
+        );
+
+        if (!hasSession) {
+          state = state.copyWith(
+            loading: false,
+            error: 'Please check your email for a confirmation link',
+          );
+          return null;
+        }
       } else {
         await authService.signIn(email: email, password: password);
+
         final userId = authService.currentUser!.id;
         final destination = await authService.destinationAfterAuth(userId);
+
         state = state.copyWith(loading: false);
+
         return destination;
       }
     } on AuthException catch (e) {
       state = state.copyWith(loading: false, error: e.message);
+
       return null;
     } catch (_) {
-      state = state.copyWith(loading: false, error: 'An unexpected error occurred');
+      state = state.copyWith(
+        loading: false,
+        error: 'An unexpected error occurred',
+      );
+
       return null;
     }
+    return null;
   }
 }
 
-final authFormProvider = NotifierProvider<AuthFormNotifier, AuthFormState>(AuthFormNotifier.new);
+final authFormProvider = NotifierProvider<AuthFormNotifier, AuthFormState>(
+  AuthFormNotifier.new,
+);

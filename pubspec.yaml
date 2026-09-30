@@ -1,6 +1,6 @@
 name: datingappflutter
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -12,8 +12,8 @@ dependencies:
     sdk: flutter
   supabase_flutter: ^2.8.0
   flutter_riverpod: ^2.6.1
-  flutter_dotenv: ^5.2.1
   cupertino_icons: ^1.0.8
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
@@ -22,5 +22,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - .env

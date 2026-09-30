@@ -1,6 +1,7 @@
+import 'package:datingappflutter/screens/discover/discover_screen.dart';
+import 'package:datingappflutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/auth_provider.dart';
 import '../common/coming_soon_page.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -14,20 +15,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
 
   List<Widget> get _pages => [
-    const ComingSoonPage(title: 'Discover', icon: Icons.explore_outlined),
+   const DiscoverScreen(),
     const ComingSoonPage(title: 'Matches', icon: Icons.favorite_outline),
     const ComingSoonPage(title: 'Messages', icon: Icons.chat_bubble_outline),
-    ComingSoonPage(
-      title: 'Profile',
-      icon: Icons.person_outline,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.logout),
-          tooltip: 'Sign out',
-          onPressed: () => ref.read(authServiceProvider).signOut(),
-        ),
-      ],
-    ),
+    const ProfileScreen(),
   ];
 
   @override
