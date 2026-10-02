@@ -112,7 +112,6 @@ class SwipeNotifier extends AsyncNotifier<SwipeState> {
         ),
       );
     } catch (_) {
-      // Even if liking fails, move to the next profile.
       state = AsyncData(
         currentState.copyWith(
           currentIndex: currentState.currentIndex + 1,
