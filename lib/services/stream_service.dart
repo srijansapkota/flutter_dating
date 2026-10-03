@@ -23,4 +23,21 @@ class StreamService {
   }
 
   Future<void> disconnect() => client.disconnectUser();
+
+  Future<Channel> openChannel(String otherUserId) async {
+    await connect();
+
+    final res = await supabase.functions.invoke(
+      'create-or-get-channel',
+      body: {'otherUserId': otherUserId},
+    );
+    final data = res.data as Map<String, dynamic>;
+
+    final channel = client.channel(
+      data['channelType'] as String,
+      id: data['channelId'] as String,
+    );
+    await channel.watch();
+    return channel;
+  }
 }
