@@ -1,8 +1,9 @@
 import 'package:datingappflutter/screens/discover/discover_screen.dart';
+import 'package:datingappflutter/screens/matches/matches_list_screen.dart';
+import 'package:datingappflutter/screens/messages/messages_screen.dart';
 import 'package:datingappflutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../common/coming_soon_page.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -15,9 +16,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
 
   List<Widget> get _pages => [
-   const DiscoverScreen(),
-    const ComingSoonPage(title: 'Matches', icon: Icons.favorite_outline),
-    const ComingSoonPage(title: 'Messages', icon: Icons.chat_bubble_outline),
+    const DiscoverScreen(),
+    const MatchesListScreen(),
+    const MessagesScreen(),
     const ProfileScreen(),
   ];
 
