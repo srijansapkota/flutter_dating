@@ -1,4 +1,5 @@
 import 'package:datingappflutter/providers/auth_provider.dart';
+import 'package:datingappflutter/providers/stream_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'edit_profile_screen.dart';
@@ -46,6 +47,7 @@ class ProfileScreen extends ConsumerWidget {
                 actions: [
                   IconButton(
                     onPressed: () async {
+                      await ref.read(streamServiceProvider).disconnect();
                       await ref.read(authServiceProvider).signOut();
                     },
                     icon: const Icon(Icons.logout),
