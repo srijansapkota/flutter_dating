@@ -1,10 +1,9 @@
 import 'package:datingappflutter/models/user_profile.dart';
+import 'package:datingappflutter/providers/auth_provider.dart';
+import 'package:datingappflutter/providers/matches_provider.dart';
 import 'package:datingappflutter/services/match_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final matchServiceProvider = Provider<MatchService>((ref) {
-  return const MatchService();
-});
+import 'package:datingappflutter/providers/match_service_provider.dart';
 
 class SwipeState {
   const SwipeState({
@@ -48,11 +47,11 @@ final swipeProvider =
 );
 
 class SwipeNotifier extends AsyncNotifier<SwipeState> {
-  late final MatchService _matchService;
+  MatchService get _matchService => ref.read(matchServiceProvider);
 
   @override
   Future<SwipeState> build() async {
-    _matchService = ref.read(matchServiceProvider);
+    ref.watch(currentUserProvider.select((user) => user?.id));
 
     final potentialMatches =
         await _matchService.getPotentialMatches();
@@ -104,6 +103,7 @@ class SwipeNotifier extends AsyncNotifier<SwipeState> {
 
     try {
       final result = await _matchService.likeUser(person.id);
+      if (result.isMatch) ref.invalidate(userMatchesProvider);
 
       state = AsyncData(
         currentState.copyWith(
@@ -112,7 +112,6 @@ class SwipeNotifier extends AsyncNotifier<SwipeState> {
         ),
       );
     } catch (_) {
-      // Even if liking fails, move to the next profile.
       state = AsyncData(
         currentState.copyWith(
           currentIndex: currentState.currentIndex + 1,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'services/supabase_config.dart';
 import 'screens/auth_gate.dart';
 
@@ -29,6 +30,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: const Color(0xFFEC4899),
+        extensions: [
+          StreamTheme(
+            brightness: Brightness.light,
+            colorScheme: StreamColorScheme.light(
+              brand: StreamColorSwatch.fromColor(const Color(0xFFEC4899)),
+            ),
+          ),
+        ],
         inputDecorationTheme: InputDecorationTheme(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(

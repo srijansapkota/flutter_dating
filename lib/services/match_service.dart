@@ -30,6 +30,15 @@ class MatchService {
         .toList();
   }
 
+  Future<List<UserProfile>> getUserMatches() async {
+    final uid = supabase.auth.currentUser!.id;
+    final rows = await supabase.from('matches').select()
+        .or('user1_id.eq.$uid,user2_id.eq.$uid');
+    final ids = rows.map((m) => m['user1_id'] == uid ? m['user2_id'] : m['user1_id']).toList();
+    final users = await supabase.from('users').select().inFilter('id', ids);
+    return users.map<UserProfile>((u) => UserProfile.fromJson(u)).toList();
+  }
+
   Future<LikeResult> likeUser(String toUserId) async {
     final user = supabase.auth.currentUser;
 
